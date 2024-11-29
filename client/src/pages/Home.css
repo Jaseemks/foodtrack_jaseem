@@ -1,0 +1,45 @@
+.fc .fc-daygrid-day.red-date {
+  background-color: red !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.fc .fc-daygrid-day {
+  padding: 5px !important;
+  background-color: #409c3b !important;
+  border-radius: 5px;
+}
+
+.fc .fc-daygrid-day-number {
+  font-size: 96px !important;
+  color: #333333 !important;
+}
+
+@media (max-width: 768px) {
+  .fc .fc-daygrid-day-number {
+    font-size: 48px !important;
+  }
+
+  .fc .fc-daygrid-day {
+    padding: 3px !important;
+  }
+}
+
+.fc .fc-daygrid-day:hover {
+  background-color: #e0e0e0 !important;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #ffeb3b !important;
+  color: #000000 !important;
+}
+
+.fc .fc-col-header-cell {
+  font-size: 14px !important;
+  background-color: #2196F3 !important;
+  color: white !important;
+}
+
+.fc {
+  font-size: 12px !important;
+}
