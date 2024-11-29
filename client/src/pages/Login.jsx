@@ -25,7 +25,7 @@ export const Login = () => {
 
   return (
     <div className="bg-no-repeat bg-green-400 bg-cover bg-center relative">
-  <div className="absolute bg-gradient-to-b from-green-500 to-green-400 opacity-75 inset-0 z-0"></div>
+  {/* <div className="absolute bg-gradient-to-b from-green-500 to-green-400 opacity-75 inset-0 z-0"></div> */}
   <div className="min-h-screen flex flex-col sm:flex-row mx-0 justify-center">
     {/* Left Section */}
     <div className="flex-col flex self-center p-5 sm:p-10 sm:max-w-5xl xl:max-w-2xl z-10 text-center sm:text-left">
@@ -104,7 +104,7 @@ export const Login = () => {
         </div>
       </div>
     </div>
-  </div>
+  {/* </div> */}
 </div>
 
   );
