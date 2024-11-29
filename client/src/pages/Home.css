@@ -43,3 +43,15 @@
 .fc {
   font-size: 12px !important;
 }
+
+/* Default min-height for larger screens */
+.min-h-screen {
+  min-height: 80vh; /* Example value for larger screens */
+}
+
+/* Adjust min-height for smaller screens */
+@media (max-width: 768px) {
+  .min-h-screen {
+    min-height: 50vh; /* Reduced height for small screens */
+  }
+}
