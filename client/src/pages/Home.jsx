@@ -1,76 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { Header } from '../components/Header';
-// import { Footer } from '../components/Footer';
-// import FullCalendar from '@fullcalendar/react';
-// import dayGridPlugin from '@fullcalendar/daygrid';
-// import interactionPlugin from '@fullcalendar/interaction';
-// import './Home.css';
-// import { axiosInstance } from '../config/axiosInstance';
-
-// export const Home = () => {
-//   const [markedDates, setMarkedDates] = useState([]);
-
-//   useEffect(() => {
-//     const fetchMarkedDates = async () => {
-//       try {
-//         const response = await axiosInstance.get('/marker/getmarked');
-//         const data = Array.isArray(response.data.data) ? response.data.data : [];
-//         const formattedDates = data.map(item => item.date.slice(0, 10));
-//         setMarkedDates(formattedDates);
-//       } catch (error) {
-//         console.error('Error fetching marked dates:', error);
-//       }
-//     };
-//     fetchMarkedDates();
-//   }, []);
-
-//   const handleDateClick = async (info) => {
-//     const clickedDate = info.dateStr;
-//     alert('You clicked on: ' + clickedDate);
-
-//     const data = {
-//       mark: "true",
-//       date: clickedDate,
-//       userid: "6746c571e408b0e2c08f28a4"
-//     };
-
-//     try {
-//       await axiosInstance.post('/marker/newmark', data);
-//     } catch (error) {
-//       console.error('Error sending data:', error);
-//     }
-//   };
-
-//   const dayCellClassNames = (arg) => {
-//     const day = arg.date.toISOString().slice(0, 10);
-//     const isMarked = markedDates.includes(day);
-//     return isMarked ? 'red-date' : '';
-//   };
-
-//   return (
-//     <>
-//       <div>
-//         <Header />
-//       </div>
-//       <div className="min-h-screen">
-//         <FullCalendar
-//           key={markedDates.join(',')}
-//           plugins={[dayGridPlugin, interactionPlugin]}
-//           initialView="dayGridMonth"
-//           timeZone="UTC"
-//           locale="en"
-//           selectable={true}
-//           dateClick={handleDateClick}
-//           dayCellClassNames={dayCellClassNames}
-//         />
-//       </div>
-//       <div>
-//         <Footer />
-//       </div>
-//     </>
-//   );
-// };
-
 import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
@@ -105,25 +32,57 @@ export const Home = () => {
       calculateRemainingDays(markedDates, rate);  // Recalculate if rate changes
     }
   }, [rate, markedDates]);
-
   const handleDateClick = async (info) => {
     const clickedDate = info.dateStr;
-    alert('You clicked on: ' + clickedDate);
-
-    const data = {
-      mark: "true",
-      date: clickedDate,
-      userid: "6746c571e408b0e2c08f28a4"
-    };
-
-    try {
-      await axiosInstance.post('/marker/newmark', data);
-      setMarkedDates(prevMarkedDates => [...prevMarkedDates, clickedDate]);
-      calculateRemainingDays([...markedDates, clickedDate], rate);  // Recalculate after new mark
-    } catch (error) {
-      console.error('Error sending data:', error);
+  
+    // Check if the clicked date is already marked
+    const isAlreadyMarked = markedDates.includes(clickedDate);
+  
+    if (isAlreadyMarked) {
+      // Confirm cancellation
+      const confirmCancel = window.confirm(`Do you want to unmark ${clickedDate}?`);
+      if (!confirmCancel) {
+        return; // Exit the function if the user clicks "Cancel"
+      }
+  
+      // Call the cancelmark API
+      try {
+        await axiosInstance.delete(`/marker/cancelmark/${clickedDate}`, {
+          data: { userid: "6746c571e408b0e2c08f28a4" }, // Include additional data if needed
+        });
+        setMarkedDates((prevMarkedDates) => prevMarkedDates.filter((date) => date !== clickedDate));
+        calculateRemainingDays(
+          markedDates.filter((date) => date !== clickedDate),
+          rate
+        ); // Recalculate after unmarking
+      } catch (error) {
+        console.error('Error cancelling mark:', error);
+      }
+    } else {
+      // Confirm marking
+      const confirmMark = window.confirm(`Are you sure you want to mark ${clickedDate} as "No Food"?`);
+      if (!confirmMark) {
+        return; // Exit the function if the user clicks "Cancel"
+      }
+  
+      // Call the newmark API
+      const data = {
+        mark: "true",
+        date: clickedDate,
+        userid: "6746c571e408b0e2c08f28a4",
+      };
+  
+      try {
+        await axiosInstance.post('/marker/newmark', data);
+        setMarkedDates((prevMarkedDates) => [...prevMarkedDates, clickedDate]);
+        calculateRemainingDays([...markedDates, clickedDate], rate); // Recalculate after marking
+      } catch (error) {
+        console.error('Error marking date:', error);
+      }
     }
   };
+  
+  
 
   const calculateRemainingDays = (markedDates, rate) => {
     const currentDate = new Date();
