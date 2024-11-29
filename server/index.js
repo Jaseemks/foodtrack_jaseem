@@ -6,7 +6,7 @@ const app = express()
 const port = 4000
 
 app.use(cors({
-  origin: "https://foodtrack-gamma.vercel.app/",
+  origin: "https://foodtrack-gamma.vercel.app",
   // origin: "http://localhost:5173",
   credentials: true,
 }));
