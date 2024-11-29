@@ -1,5 +1,5 @@
 const express = require('express');
-const { createMark, getMark } = require('../../controller/markController');
+const { createMark, getMark, cancelMark } = require('../../controller/markController');
 const markerrouter = express.Router();
 
 markerrouter.get('/', (req, res, next) => {
@@ -14,7 +14,7 @@ markerrouter.get("/getmarked",getMark)
 
 // router.put("/edit/:id",editTask)
 
-// router.delete("/deletetask/:id",deleteTask)
+markerrouter.delete("/cancelmark/:date",cancelMark)
 
 
 module.exports ={markerrouter};

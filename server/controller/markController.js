@@ -25,22 +25,21 @@ const createMark = async (req, res, next) => {
 }
 
 
+const cancelMark = async (req, res, next) => {
+    try {
+        const { date } = req.params;
+        const { userid } = req.body; // If needed
+        console.log(`Canceling mark for date: ${date} and user: ${userid}`);
+    
+        // Logic to find and delete the mark
+        await Mark.deleteOne({ date, userid });
+    
+        res.status(200).json({ success: true, message: 'Mark canceled successfully' });
+      } catch (error) {
+        res.status(500).json({ success: false, message: 'Internal Server Error', error });
+      }
+};
 
-// const getMark = async (req, res, next) => {
-//     try {
-//         console.log('getttttttttttttttttttttt');
-//         const data = await Mark.find();
-
-//         res.status(200).json({ success: true, message: "data fetched", data: data });
-//         console.log(data);
-        
-
-//     } catch (error) {
-//         console.log(error);
-//         res.status(error.statusCode || 500).json({ message: error || 'internal server error' })
-
-//     }
-// }
 
 const getMark = async (req, res, next) => {
     try {
@@ -78,4 +77,4 @@ const getMark = async (req, res, next) => {
 };
 
 
-module.exports = {createMark,getMark}
+module.exports = {createMark,getMark,cancelMark}
